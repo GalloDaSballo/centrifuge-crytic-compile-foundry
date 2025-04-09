@@ -7,3 +7,6 @@
 [submodule "lib/setup-helpers"]
 	path = lib/setup-helpers
 	url = https://github.com/Recon-Fuzz/setup-helpers
+[submodule "lib/protocol-v3"]
+	path = lib/protocol-v3
+	url = https://github.com/centrifuge/protocol-v3
