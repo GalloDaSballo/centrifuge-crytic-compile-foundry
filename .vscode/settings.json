@@ -1,0 +1,5 @@
+{
+    "recon.defaultFuzzer": "medusa",
+    "recon.showAllFiles": true,
+    "recon.medusa.workers": 12
+}

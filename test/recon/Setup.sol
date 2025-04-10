@@ -13,10 +13,26 @@ import {AssetManager} from "@recon/AssetManager.sol";
 import {Utils} from "@recon/Utils.sol";
 
 // Your deps
-import "src/Counter.sol";
+import "@centrifuge/hub/ShareClassManager.sol";
+
+
+contract MockHubRegistry {
+    function currency(PoolId pId) external pure returns (AssetId) {
+        return AssetId.wrap(123);
+    }
+}
+
+contract MockValuation {
+    function getQuote(uint256 baseAmount, address base, address quote) external view returns (uint256 quoteAmount) {
+        return baseAmount;
+    }
+
+}
 
 abstract contract Setup is BaseSetup, ActorManager, AssetManager, Utils {
-    Counter counter;
+    ShareClassManager shareClassManager;
+    IHubRegistry mockRegistry;
+    IERC7726 valuation;
 
     /// === Setup === ///
     /// This contains all calls to be performed in the tester constructor, both for Echidna and Foundry
@@ -25,11 +41,16 @@ abstract contract Setup is BaseSetup, ActorManager, AssetManager, Utils {
         _addActor(address(0x411c3));
         _newAsset(18); // New 18 decimals token
 
-        counter = new Counter();
+
+        mockRegistry = IHubRegistry(address(new MockHubRegistry()));
+        valuation = IERC7726(address(new MockValuation()));
+
+        shareClassManager = new ShareClassManager(mockRegistry, address(this));
+
 
         // Mints to all actors and approves allowances to the counter
         address[] memory approvalArray = new address[](1);
-        approvalArray[0] = address(counter);
+        // approvalArray[0] = address(counter);
         _finalizeAssetDeployment(_getActors(), approvalArray, type(uint88).max);
     }
 

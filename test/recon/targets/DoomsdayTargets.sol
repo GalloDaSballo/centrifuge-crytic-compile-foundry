@@ -19,12 +19,5 @@ abstract contract DoomsdayTargets is
         revert("stateless");
     }
 
-    function doomsday_increment_never_reverts() public stateless asAdmin {
-        try counter.increment() {
-
-        } catch {
-            t(false, "doomsday_increment_never_reverts");
-        }
-    }
 
 }
